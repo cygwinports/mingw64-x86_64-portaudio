@@ -1,0 +1,49 @@
+--- origsrc/portaudio/bindings/cpp/example/devs.cxx	2006-05-25 04:34:26.000000000 -0500
++++ src/portaudio/bindings/cpp/example/devs.cxx	2013-12-05 18:07:49.291974900 -0600
+@@ -1,7 +1,7 @@
+ #include <iostream>
+ #include "portaudiocpp/PortAudioCpp.hxx"
+ 
+-#ifdef WIN32
++#if PA_USE_ASIO
+ #include "portaudiocpp/AsioDeviceAdapter.hxx"
+ #endif
+ 
+@@ -109,7 +109,7 @@ int main(int, char*[])
+ 			std::cout << "Default high input latency  = " << (*i).defaultHighInputLatency() << std::endl; // 8.3
+ 			std::cout << "Default high output latency = " << (*i).defaultHighOutputLatency() << std::endl; // 8.3
+ 
+-#ifdef WIN32
++#if PA_USE_ASIO
+ 			// ASIO specific latency information:
+ 			if ((*i).hostApi().typeId() == paASIO)
+ 			{
+--- origsrc/portaudio/configure.in	2011-03-25 11:59:27.000000000 -0500
++++ src/portaudio/configure.in	2013-12-05 18:38:24.542945200 -0600
+@@ -225,7 +225,6 @@ case "${host_os}" in
+ 
+         PADLL="portaudio.dll"
+         THREAD_CFLAGS="-mthreads"
+-        SHARED_FLAGS="-shared"
+         CFLAGS="$CFLAGS -I\$(top_srcdir)/include -DPA_USE_WMME=0 -DPA_USE_ASIO=0 -DPA_USE_WDMKS=0 -DPA_USE_DS=0 -DPA_USE_WASAPI=0"
+ 
+         if [[ "x$with_directx" = "xyes" ]]; then
+--- origsrc/portaudio/src/hostapi/wdmks/pa_win_wdmks.c	2011-02-17 09:56:04.000000000 -0600
++++ src/portaudio/src/hostapi/wdmks/pa_win_wdmks.c	2013-12-05 18:30:36.490174100 -0600
+@@ -59,8 +59,6 @@
+ 
+ #ifdef __GNUC__
+     #include <initguid.h>
+-    #define _WIN32_WINNT 0x0501
+-    #define WINVER 0x0501
+ #endif
+ 
+ #include <string.h> /* strlen() */
+@@ -76,7 +74,6 @@
+ #include "pa_debugprint.h"
+ 
+ #include <windows.h>
+-#include <winioctl.h>
+ #include <process.h>
+ 
+ #ifdef __GNUC__
