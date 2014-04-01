@@ -19,7 +19,7 @@
 --- origsrc/portaudio/bindings/cpp/CMakeLists.txt	1969-12-31 18:00:00.000000000 -0600
 +++ src/portaudio/bindings/cpp/CMakeLists.txt	2014-03-31 23:16:32.798796600 -0500
 @@ -0,0 +1,24 @@
-+INCLUDE_DIRECTORIES(include/portaudiocpp)
++INCLUDE_DIRECTORIES(include)
 +
 +SET(PA_CXX_SOURCES
 +    source/portaudiocpp/BlockingStream.cxx
