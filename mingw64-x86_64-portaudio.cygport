@@ -2,7 +2,7 @@ CROSS_HOST="x86_64-w64-mingw32"
 inherit cross
 
 NAME="mingw64-x86_64-portaudio"
-VERSION=19.20110326
+VERSION=19.20140130
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="Cross platform audio I/O library for Win64 toolchain"
@@ -14,7 +14,10 @@ software between developers on different platforms."
 HOMEPAGE="http://www.portaudio.com/"
 SRC_URI="http://www.portaudio.com/archives/pa_stable_v${VERSION//./_}.tgz"
 SRC_DIR="portaudio"
-PATCH_URI="19.20110326-mingw64.patch"
+PATCH_URI="
+	19.20140130-mingw64.patch
+	19.20140130-parallel-make.patch
+"
 
 DIFF_EXCLUDES="Makefile.in"
 
@@ -24,7 +27,18 @@ CYGCONF_ARGS="
 	--without-jack
 	--without-oss
 	--without-asihpi
+	--with-dxdir=${CROSS_INCLUDEDIR}
 	--with-winapi=wmme,directx,wdmks
 	lt_cv_deplibs_check_method=pass_all
 "
+# cmake does not build bindings/cxx nor installs, but for future reference:
+CYGCMAKE_ARGS="
+	-DDXSDK_ROOT_DIR=${CROSS_PREFIX}
+	-DDXSDK_INCLUDE_DIR=${CROSS_INCLUDEDIR}
+	-DDXSDK_DSOUND_LIBRARY=${CROSS_LIBDIR}/libdsound.a
+	-DPA_USE_DIRECTSOUNDFULLDUPLEXCREATE=OFF
+	-DPA_USE_WASAPI=OFF
+	-DPA_BUILD_CXX=ON
+"
+
 DOCS="V19-devel-readme.txt"

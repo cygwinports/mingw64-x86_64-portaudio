@@ -1,0 +1,45 @@
+--- origsrc/portaudio/CMakeLists.txt	2014-03-31 23:02:39.312957300 -0500
++++ src/portaudio/CMakeLists.txt	2014-03-31 23:17:59.313782600 -0500
+@@ -335,9 +335,15 @@ SET_TARGET_PROPERTIES(portaudio PROPERTI
+ SET_TARGET_PROPERTIES(portaudio_static PROPERTIES OUTPUT_NAME portaudio_static_${TARGET_POSTFIX})
+ ENDIF(WIN32)
+ 
++OPTION(PA_BUILD_CXX "Include C++ bindings" OFF)
+ OPTION(PA_BUILD_TESTS "Include test projects" OFF)
+ OPTION(PA_BUILD_EXAMPLES "Include example projects" OFF)
+ 
++# Prepared for inclusion of C++ bindings
++IF(PA_BUILD_CXX)
++SUBDIRS(bindings/cpp)
++ENDIF(PA_BUILD_CXX)
++
+ # Prepared for inclusion of test files
+ IF(PA_BUILD_TESTS)
+ SUBDIRS(test)
+--- origsrc/portaudio/bindings/cpp/CMakeLists.txt	1969-12-31 18:00:00.000000000 -0600
++++ src/portaudio/bindings/cpp/CMakeLists.txt	2014-03-31 23:16:32.798796600 -0500
+@@ -0,0 +1,24 @@
++INCLUDE_DIRECTORIES(include/portaudiocpp)
++
++SET(PA_CXX_SOURCES
++    source/portaudiocpp/BlockingStream.cxx
++    source/portaudiocpp/CallbackInterface.cxx
++    source/portaudiocpp/CallbackStream.cxx
++    source/portaudiocpp/CFunCallbackStream.cxx
++    source/portaudiocpp/CppFunCallbackStream.cxx
++    source/portaudiocpp/Device.cxx
++    source/portaudiocpp/DirectionSpecificStreamParameters.cxx
++    source/portaudiocpp/Exception.cxx
++    source/portaudiocpp/HostApi.cxx
++    source/portaudiocpp/InterfaceCallbackStream.cxx
++    source/portaudiocpp/MemFunCallbackStream.cxx
++    source/portaudiocpp/Stream.cxx
++    source/portaudiocpp/StreamParameters.cxx
++    source/portaudiocpp/System.cxx
++    source/portaudiocpp/SystemDeviceIterator.cxx
++    source/portaudiocpp/SystemHostApiIterator.cxx)
++
++ADD_LIBRARY(portaudiocpp SHARED ${PA_CXX_SOURCES})
++TARGET_LINK_LIBRARIES(portaudiocpp portaudio)
++
++ADD_LIBRARY(portaudiocpp_static STATIC ${PA_CXX_SOURCES})
