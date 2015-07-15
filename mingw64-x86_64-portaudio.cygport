@@ -3,7 +3,7 @@ inherit cross
 
 NAME="mingw64-x86_64-portaudio"
 VERSION=19.20140130
-RELEASE=1
+RELEASE=2
 CATEGORY="Devel"
 SUMMARY="Cross platform audio I/O library for Win64 toolchain"
 DESCRIPTION="PortAudio is a free, cross platform, open-source, audio I/O
