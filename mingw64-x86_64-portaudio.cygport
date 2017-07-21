@@ -3,7 +3,7 @@ inherit cross
 
 NAME="mingw64-x86_64-portaudio"
 VERSION=19.20140130
-RELEASE=2
+RELEASE=3
 CATEGORY="Devel"
 SUMMARY="Cross platform audio I/O library for Win64 toolchain"
 DESCRIPTION="PortAudio is a free, cross platform, open-source, audio I/O
@@ -15,11 +15,11 @@ HOMEPAGE="http://www.portaudio.com/"
 SRC_URI="http://www.portaudio.com/archives/pa_stable_v${VERSION//./_}.tgz"
 SRC_DIR="portaudio"
 PATCH_URI="
+	http://pkgs.fedoraproject.org/cgit/rpms/portaudio.git/plain/portaudio-audacity.patch
 	19.20140130-mingw64.patch
 	19.20140130-parallel-make.patch
+	19.20140130-win-headers.patch
 "
-
-DIFF_EXCLUDES="Makefile.in"
 
 CYGCONF_ARGS="
 	--enable-cxx
@@ -31,6 +31,7 @@ CYGCONF_ARGS="
 	--with-winapi=wmme,directx,wdmks
 	lt_cv_deplibs_check_method=pass_all
 "
+MAKEOPTS+=" depcomp=/usr/share/automake-1.11/depcomp"
 # cmake does not build bindings/cxx nor installs, but for future reference:
 CYGCMAKE_ARGS="
 	-DDXSDK_ROOT_DIR=${CROSS_PREFIX}
